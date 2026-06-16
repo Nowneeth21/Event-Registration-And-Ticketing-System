@@ -20,29 +20,25 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv(
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-    'event.apps.EventConfig',
-    'user.apps.UserConfig',
-    'api.apps.ApiConfig',
-    
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
-    
-    'rest_framework',
-    'rest_framework.authtoken'
-
-]
+  INSTALLED_APPS = [
+      'django.contrib.admin',
+      'django.contrib.auth',
+      'django.contrib.contenttypes',
+      'django.contrib.sessions',
+      'django.contrib.messages',
+      'django.contrib.staticfiles',
+      'event.apps.EventConfig',
+      'user.apps.UserConfig',
+      'api.apps.ApiConfig',
+-     'django.contrib.sites',   ← REMOVED
+-     'allauth',                ← REMOVED
+-     'allauth.account',        ← REMOVED
+-     'allauth.socialaccount',  ← REMOVED
+-     'allauth.socialaccount.providers.facebook',  ← REMOVED
+-     'allauth.socialaccount.providers.google',    ← REMOVED
+      'rest_framework',
+      'rest_framework.authtoken'
+  ]
 
 SITE_ID = 1
 
@@ -93,16 +89,10 @@ DATABASES = {
 }
 
 
-AUTHENTICATION_BACKENDS = [
-    
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
-    
-]
-
+  AUTHENTICATION_BACKENDS = [
+      'django.contrib.auth.backends.ModelBackend',
+-     'allauth.account.auth_backends.AuthenticationBackend',  ← REMOVED
+  ]
 
 
 

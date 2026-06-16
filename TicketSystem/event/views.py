@@ -84,10 +84,11 @@ def createVenueEvent(request):
     return render(request, 'event/venue-event.html', context)
 
 
-def allEvents(request):
-    
-    profile = request.user.profile
-    
+  def allEvents(request):
+-     profile = request.user.profile   ← CRASHED for non-logged-in users
++     profile = None                   ← FIXED
++     if request.user.is_authenticated:
++         profile = request.user.profile
     
     search_query = " "
     
@@ -99,22 +100,21 @@ def allEvents(request):
         Q(description__icontains=search_query)
     )
         
-    
     context = {
         'events':events,
         'profile':profile,
         'search_query': search_query
     }
     
-    
     return render(request, 'event/events.html', context)
 
 
-def eventDetail(request,pk):
-    
-    profile = request.user.profile
+  def eventDetail(request, pk):
+-     profile = request.user.profile   ← CRASHED for non-logged-in users
++     profile = None                   ← FIXED
++     if request.user.is_authenticated:
++         profile = request.user.profile
     event = Event.objects.get(id=pk)
-    
     
     context ={
         'profile':profile,
@@ -182,11 +182,19 @@ def checkout(request, pk):
         messages.success(request, 'Event Booked Successfully')
         return redirect('confirm-booking')
     
-    
+    + # Calculate tickets remaining       ← ADDED
++ booked = event.participants.all().count()
++ left = event.total_tickets - booked if event.total_tickets else 0
+  context = {
+      'profile': profile,
+      'event': event,
+-     'left': left    ← was crashing because 'left' didn't exist above
++     'left': left    ← now works because we calculate it above
+  }
     context = {
         'profile': profile,
         'event': event, 
-        'left':left
+        'left': left
     }
 
     return render(request, 'event/checkout.html', context)
