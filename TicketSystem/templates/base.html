@@ -1,69 +1,80 @@
+{% load static %}
 <!DOCTYPE html>
-
 <html lang="en" class="h-100">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, shrink-to-fit=9" />
-    <meta name="description" content="Gambolthemes" />
-    <meta name="author" content="Gambolthemes" />
-    <title>Barren - Simple Online Event Ticketing System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>NexTix - Modern Event Ticketing</title>
 
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/images/fav.png"
-    />
+    <link rel="icon" type="image/png" href="{% static 'images/fav.png' %}" />
 
-    <link rel="stylesheet" type="text/css" href="styles/alert.css" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="../../../../fonts.googleapis.com/css2@family=Roboto%253Aital,wght@0,300%3B0,400%3B0,500%3B0,700%3B0,900%3B1,100%3B1,300%3B1,400%3B1,500%3B1,700%3B1,900&amp;display=swap.css"
-      rel="stylesheet"
-    />
-    <link href="vendor/unicons-2.0.1/css/unicons.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
-    <link href="css/responsive.css" rel="stylesheet" />
-    <link href="css/night-mode.css" rel="stylesheet" />
-
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
-    <link href="vendor/OwlCarousel/assets/owl.carousel.css" rel="stylesheet" />
-    <link
-      href="vendor/OwlCarousel/assets/owl.theme.default.min.css"
-      rel="stylesheet"
-    />
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link
-      href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css"
-      rel="stylesheet"
-    />
+    <!-- Google Fonts: Outfit & Inter are imported in style.css -->
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" />
+    
+    <!-- Custom Glassmorphism Styles -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   </head>
   
   <body class="d-flex flex-column h-100">
-    {% block content %}
+    
+    <!-- Floating Glass Header -->
+    <header class="glass-header">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-6 col-md-4">
+            <a href="/" class="navbar-brand">
+              <i class="fa-solid fa-ticket text-accent"></i> NexTix
+            </a>
+          </div>
+          <div class="col-6 col-md-8 text-end">
+            <nav class="d-none d-md-inline-block me-3">
+              <a href="/" class="nav-link d-inline-block">Events</a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'event-dashboard' %}" class="nav-link d-inline-block">Dashboard</a>
+              {% endif %}
+            </nav>
+            
+            {% if user.is_authenticated %}
+              <a href="{% url 'user-logout' %}" class="btn-glass"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            {% else %}
+              <a href="{% url 'user-login' %}" class="btn-glass me-2">Login</a>
+              <a href="{% url 'user-login' %}" class="btn-accent">Sign Up</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
 
-    <div style = "position:absolute; right:80px; top:80px;" class="">
-
+    <!-- Messages -->
+    <div style="position:fixed; right:20px; top:100px; z-index: 1050; width: 300px;">
       {% if messages %}
         {% for message in messages %}
-        <div  class="alert {{message.tags}}">
-        <input type="checkbox" id="alert1"/>
-        <label class="close" title="close" for="alert1">
-          <i class="icon-remove"></i>
-        </label>
-        <p class="inner">
-          <strong></strong> {{message}}
-        </p>
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-lg" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endfor %}
       {% endif %}
-  
     </div>
 
-    
-    
-    {% end block content%}
+    <!-- Main Content -->
+    <main class="flex-shrink-0">
+      {% block content %}
+      {% endblock content %}
+    </main>
+
+    <!-- Simple Glass Footer -->
+    <footer class="mt-auto py-4" style="background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1);">
+      <div class="container text-center">
+        <p class="mb-0 text-secondary">&copy; 2026 NexTix - Modern Event Registration. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   </body>
 </html>
