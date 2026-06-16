@@ -127,6 +127,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # WhiteNoise compressed static file storage
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
