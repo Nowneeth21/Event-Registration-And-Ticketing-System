@@ -1,0 +1,206 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  {% include 'includes/head.html' %}
+
+  <div class="modal fade" id="FFModal" tabindex="-1" aria-labelledby="FFModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="FFModalLabel">Following & Followers</h5>
+          <button type="button" class="close-model-btn" data-bs-dismiss="modal" aria-label="Close"><i class="uil uil-multiply"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="model-content follow-people-content">
+            <div class="">
+              <ul class="nav nav-pills ff-tablist mb-2" role="tablist">
+                <li class="nav-item d-flex me-4">
+                  <a class="nav-link px-0 pt-0 pb-3 active" id="pills-following-tab" data-bs-toggle="pill" href="attendee_profile_view.html#following" role="tab" aria-controls="following" aria-selected="true">Following <span class="following_count">{{number_of_followings}}</span></a>
+                </li>
+                <li class="nav-item d-flex">
+                  <a class="nav-link px-0 pt-0 pb-3" id="pills-followers-tab" data-bs-toggle="pill" href="attendee_profile_view.html#followers" role="tab" aria-controls="followers" aria-selected="false">Followers <span class="following_count">{{number_of_followers}}</span></a>
+                </li>
+              </ul>
+              <div class="tab-content mt-4">
+                <div class="tab-pane fade active show" id="following" role="tabpanel" aria-labelledby="pills-following-tab">
+                  <div class="users-list min-height-430">
+                    {% for user in following %}
+                    <div class="user-follow-card mb-4">
+                      <div class="follow-card-left">
+                        <div class="follow-avatar">
+                          <img src="{{user.profile.profile_image.url}}" alt="" />
+                        </div>
+                        <div class="follow-name">
+                          <h5>{{user.profile.name}}</h5>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div class="follow-card-btn">
+                        <button class="follow-btn">Following</button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="followers" role="tabpanel" aria-labelledby="pills-followers-tab">
+                  <div class="users-list min-height-430">
+                    {% for user in followers %}
+                    <div class="user-follow-card mb-4">
+                      <div class="follow-card-left">
+                        <div class="follow-avatar">
+                          <img src="{{user.profile.profile_image.url}}" alt="" />
+                        </div>
+                        <div class="follow-name">
+                          <h5>{{user.profile.name}}</h5>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div class="follow-card-btn">
+                        <button class="follow-btn">Following</button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">John Doe</h5>
+          <button type="button" class="close-model-btn" data-bs-dismiss="modal" aria-label="Close"><i class="uil uil-multiply"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="model-content main-form">
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <div class="form-group mt-4">
+                  <label class="form-label">Subject*</label>
+                  <input class="form-control h_40" type="text" placeholder="" value="" />
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12">
+                <div class="form-group mt-4">
+                  <label class="form-label">Message*</label>
+                  <textarea class="form-textarea" placeholder=""></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="co-main-btn min-width btn-hover h_40" data-bs-target="#contactModal" data-bs-toggle="modal" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="main-btn min-width btn-hover h_40">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="profile-banner">
+      <div class="hero-cover-block">
+        <div class="hero-cover">
+          <div class="hero-cover-img"></div>
+        </div>
+      </div>
+      <div class="user-dt-block">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-4 col-lg-5 col-md-12">
+              <div class="main-card user-left-dt">
+                <div class="user-avatar-img">
+                  <img src="{{organizer.profile_image.url}}" alt="" />
+                </div>
+                <div class="user-dts">
+                  <h4 class="user-name">{{ organizer.name }}<span class="verify-badge"><i class="fa-solid fa-circle-check"></i></span></h4>
+                  <span class="user-email"><a href="#" class="__cf_email__" data-cfemail="0f656e7c7c666c6e4f6a776e627f636a216c6062">{{ organizer.email }}</a></span>
+                </div>
+                <div class="ff-block">
+                  <a href="attendee_profile_view.html#" class="" role="button" data-bs-toggle="modal" data-bs-target="#FFModal"><span>{{number_of_followings}}</span>Followers</a>
+                  <a href="attendee_profile_view.html#" class="" role="button" data-bs-toggle="modal" data-bs-target="#FFModal"><span>{{number_of_followers}}</span>Following</a>
+                </div>
+                <div class="user-description">
+                  <p>{{ organizer.bio }}</p>
+
+                </div>
+                {% if profile.name == organizer.name %}
+                {% else %}
+
+                <form action="{% url 'remove-follower' organizer.id %}" method="POST">
+                <div class="user-btns">
+                    {% csrf_token %}
+                    {% if is_following %}
+                    <button type="submit" class="main-btn btn-hover min-width h_40 me-2">UnFollow</button>
+                </form>
+
+                {% else %}
+                <a class="main-btn btn-hover min-width h_40 me-2" href="{% url 'add-follower' organizer.id %}">Follow</a>
+                {% endif %}
+                  <button class="co-main-btn min-width h_40" data-bs-toggle="modal" data-bs-target="#contactModal">Contant Us</button>
+                </div>
+                
+                {% endif %}
+                <div class="profile-social-link">
+                  <h6>Find me on</h6>
+                  
+                    <div class="social-links">
+                    {% if organizer.social_facebook %}
+                    <a href="{{profile.social_facebook}}" class="social-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook"><i class="fab fa-facebook-square"></i></a>
+                    {% endif %}
+
+                    {% if organizer.social_instagram %}
+                    <a href="{{social.social_instagram}}" class="social-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    {% endif %}
+
+                    {% if organizer.social_youtube %}
+                    <a href="{{social.youtube}}" class="social-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Youtube"><i class="fab fa-youtube"></i></a>
+                    {% endif %}
+
+                    {% if organizer.website %}
+                    <a href="{{social.social_website}}" class="social-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Website"><i class="fab fa-globe"></i></a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-8 col-lg-7 col-md-12">
+              <div class="right-profile mt-2">
+                <div class="user-events">
+                  <div class="row">
+                    <div class="col-md-12">
+                      {% for events in organizer_events%}
+                      <div class="main-card mt-4">
+                        <div class="card-top p-4 border-bottom-0">
+                          <div class="card-event-img">
+                            <img src="{{events.image.url}}" alt="" />
+                          </div>
+                          <div class="card-event-dt">
+                            <h5>{{events.title}}</h5>
+                            <div class="evnt-time">{{events.event_date}}</div>
+                            <div class="event-btn-group">
+                              <button class="esv-btn me-2" onclick="window.location.href='{% url 'event-detail' events.id %}'"><i class="fa-solid fa-arrow-up-from-bracket me-2"></i>View</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'includes/footer.html' %}
+{% endblock %}

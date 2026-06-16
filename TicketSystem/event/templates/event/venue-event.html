@@ -1,0 +1,117 @@
+{% extends 'layouts/base.html' %} 
+
+{% block content %} 
+
+{% load static %}
+
+{% include 'includes/head.html' %}
+
+
+  
+    <div class="wrapper">
+      <div class="breadcrumb-block">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 col-md-10">
+              <div class="barren-breadcrumb">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a
+                        href="https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/index.html"
+                        >Home</a
+                      >
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a
+                        href="https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/create.html"
+                        >Create</a
+                      >
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Create Online Event
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="event-dt-block p-80">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12">
+              <div class="main-title text-center">
+                <h3>Create Venue Event</h3>
+              </div>
+            </div>
+            <div class="col-xl-8 col-lg-9 col-md-12">
+              <div class="wizard-steps-block">
+                <div id="add-event-tab" class="step-app">
+                  <div class="step-content">
+                    <div
+                      class="step-tab-panel step-tab-info active"
+                      id="tab_step1">
+                        
+                      <div class="tab-from-content">
+                        <div class="main-card">
+                          <div class="bp-title">
+                            <h4>
+                              <i
+                                class="fa-solid fa-circle-info step_icon me-3"
+                              ></i
+                              >Details
+                            </h4>
+                          </div>
+                          <div class="p-4 bp-form main-form">
+                            <div class="row">
+
+
+                        <form action="" method="POST" enctype="multipart/form-data" class="mt-3">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form ">
+                            <label for="formInput">{{field.label}}:</label>
+
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <p style="color:red; "> {{error}}</p>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <div class="step-footer step-tab-pager mt-4">
+                        <input class="btn btn-default btn-hover steps_btn center mx-auto" type="submit" value="Submit" />
+                        </div>
+                       
+
+                           
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="step-tab-panel step-tab-location" id="tab_step3">
+                    </div>
+                  </div>
+                  
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div>
+
+    </div>
+
+{% include 'includes/footer.html' %}
+
+{% include 'includes/event-footer.html' %}
+
+{% endblock %}
