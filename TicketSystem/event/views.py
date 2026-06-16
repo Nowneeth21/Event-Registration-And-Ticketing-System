@@ -84,11 +84,11 @@ def createVenueEvent(request):
     return render(request, 'event/venue-event.html', context)
 
 
-  def allEvents(request):
--     profile = request.user.profile   ← CRASHED for non-logged-in users
-+     profile = None                   ← FIXED
-+     if request.user.is_authenticated:
-+         profile = request.user.profile
+def allEvents(request):
+    
+    profile = None
+    if request.user.is_authenticated:
+        profile = request.user.profile
     
     search_query = " "
     
@@ -109,11 +109,11 @@ def createVenueEvent(request):
     return render(request, 'event/events.html', context)
 
 
-  def eventDetail(request, pk):
--     profile = request.user.profile   ← CRASHED for non-logged-in users
-+     profile = None                   ← FIXED
-+     if request.user.is_authenticated:
-+         profile = request.user.profile
+def eventDetail(request,pk):
+    
+    profile = None
+    if request.user.is_authenticated:
+        profile = request.user.profile
     event = Event.objects.get(id=pk)
     
     context ={
@@ -171,26 +171,16 @@ def checkout(request, pk):
     
     profile = request.user.profile
     event = Event.objects.get(id=pk)
-    
-    
- 
-
-
 
     if request.method == 'POST':
         event.participants.add(profile) 
         messages.success(request, 'Event Booked Successfully')
         return redirect('confirm-booking')
     
-    + # Calculate tickets remaining       ← ADDED
-+ booked = event.participants.all().count()
-+ left = event.total_tickets - booked if event.total_tickets else 0
-  context = {
-      'profile': profile,
-      'event': event,
--     'left': left    ← was crashing because 'left' didn't exist above
-+     'left': left    ← now works because we calculate it above
-  }
+    # Calculate tickets remaining
+    booked = event.participants.all().count()
+    left = event.total_tickets - booked if event.total_tickets else 0
+    
     context = {
         'profile': profile,
         'event': event, 
@@ -209,6 +199,5 @@ def bookingConfirm(request):
         'profile':profile
         
     }
-    
     
     return render(request, 'event/booking-confirmed.html',context)

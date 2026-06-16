@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import os
 from decouple import config, Csv
@@ -7,7 +6,6 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # ============================================================
 # SECURITY — Read from .env file (never hardcode secrets!)
 # ============================================================
@@ -15,30 +13,25 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-producti
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,event-registration-and-ticketing-system.onrender.com', cast=Csv())
 
 # Application definition
 
-  INSTALLED_APPS = [
-      'django.contrib.admin',
-      'django.contrib.auth',
-      'django.contrib.contenttypes',
-      'django.contrib.sessions',
-      'django.contrib.messages',
-      'django.contrib.staticfiles',
-      'event.apps.EventConfig',
-      'user.apps.UserConfig',
-      'api.apps.ApiConfig',
--     'django.contrib.sites',   ← REMOVED
--     'allauth',                ← REMOVED
--     'allauth.account',        ← REMOVED
--     'allauth.socialaccount',  ← REMOVED
--     'allauth.socialaccount.providers.facebook',  ← REMOVED
--     'allauth.socialaccount.providers.google',    ← REMOVED
-      'rest_framework',
-      'rest_framework.authtoken'
-  ]
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    'event.apps.EventConfig',
+    'user.apps.UserConfig',
+    'api.apps.ApiConfig',
+    
+    'rest_framework',
+    'rest_framework.authtoken'
+]
 
 SITE_ID = 1
 
@@ -59,9 +52,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # os.path.join('BASE_DIR', 'templates')
             BASE_DIR / 'templates'
-            ],
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,7 +68,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'TicketSystem.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -88,13 +79,9 @@ DATABASES = {
     )
 }
 
-
-  AUTHENTICATION_BACKENDS = [
-      'django.contrib.auth.backends.ModelBackend',
--     'allauth.account.auth_backends.AuthenticationBackend',  ← REMOVED
-  ]
-
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -114,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -125,7 +111,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
