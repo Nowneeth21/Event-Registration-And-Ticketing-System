@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextix-deployment
+  labels:
+    app: nextix
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nextix
+  template:
+    metadata:
+      labels:
+        app: nextix
+    spec:
+      containers:
+      - name: nextix-app
+        image: your-dockerhub-username/nextix-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DEBUG
+          value: "False"
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nextix-secrets
+              key: secret-key
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: nextix-secrets
+              key: database-url
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
