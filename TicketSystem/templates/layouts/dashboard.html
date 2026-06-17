@@ -1,12 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-{% include 'includes/dashboard-head.html'%}
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>NexTix - Dashboard</title>
+  <link rel="icon" type="image/png" href="{% static 'images/fav.png' %}" />
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+</head>
 <body class="d-flex flex-column h-100">
 
-    {% block content %}
+  {% include 'includes/head.html' %}
 
-    {% endblock content %}
+  {% block content %}
+  {% endblock content %}
 
-{% include 'includes/dashboard-js.html'%}
+  {% include 'includes/footer.html' %}
+
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

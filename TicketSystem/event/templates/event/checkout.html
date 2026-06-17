@@ -1,247 +1,127 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 
 {% block content %}
-  {% include 'includes/head.html' %}
-  
 
-  <div class="wrapper">
-    <div class="breadcrumb-block">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-10">
-            <div class="barren-breadcrumb">
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item">
-                    <a href="index.html">Home</a>
-                  </li>
-                  <li class="breadcrumb-item">
-                    <a href="explore_events.html">Explore Events</a>
-                  </li>
-                  <li class="breadcrumb-item">
-                    <a href="online_event_detail_view.html">Online Event Detail View</a>
-                  </li>
-                  <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                </ol>
-              </nav>
+<div class="page-header">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'events' %}">Events</a></li>
+        <li class="breadcrumb-item active">Checkout</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="section-py">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+
+      <!-- LEFT: Billing Form -->
+      <div class="col-lg-8">
+        <h2 class="fw-bold mb-4">Complete Your Booking</h2>
+
+        <div class="glass-card-static p-4 p-md-5">
+          <form method="POST" action="">
+            {% csrf_token %}
+
+            <h5 class="mb-4"><i class="fa-solid fa-user text-accent me-2"></i>Contact Details</h5>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control h_50" name="first_name" value="{{ user.first_name }}" placeholder="First Name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control h_50" name="last_name" value="{{ user.last_name }}" placeholder="Last Name">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control h_50" name="email" value="{{ user.email }}" placeholder="your@email.com">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control h_50" name="phone" placeholder="+91 00000 00000">
+              </div>
             </div>
+
+            <hr style="border-color:rgba(0,0,0,0.06);" class="my-4">
+
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <h5 class="mb-0"><i class="fa-solid fa-ticket text-accent me-2"></i>Order Summary</h5>
+            </div>
+
+            <div class="glass-card-static p-4 mb-4" style="background:rgba(2,132,199,0.04);">
+              <div class="d-flex align-items-start gap-3">
+                {% if event.image %}
+                  <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:80px;height:64px;object-fit:cover;border-radius:12px;flex-shrink:0;">
+                {% endif %}
+                <div class="flex-grow-1">
+                  <div class="fw-bold">{{ event.title }}</div>
+                  <div class="text-secondary small mt-1">
+                    <i class="fa-regular fa-calendar me-1"></i>{{ event.event_date|date:"D, d M Y" }}
+                    &nbsp;·&nbsp;
+                    <i class="fa-solid fa-location-dot me-1"></i>{{ event.event_location|default:"Online" }}
+                  </div>
+                </div>
+                <div class="fw-bold text-accent" style="white-space:nowrap;">
+                  {% if event.price == 0 %}Free{% else %}${{ event.price }}{% endif %}
+                </div>
+              </div>
+
+              <div class="mt-3 pt-3" style="border-top:1px solid rgba(0,0,0,0.06);">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-secondary">Subtotal</span>
+                  <span>{% if event.price == 0 %}Free{% else %}${{ event.price }}{% endif %}</span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold mt-2">
+                  <span>Total</span>
+                  <span class="text-accent">{% if event.price == 0 %}Free{% else %}${{ event.price }}{% endif %}</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-accent w-100 py-3" style="border-radius:14px; font-size:1.05rem;">
+              <i class="fa-solid fa-check-circle me-2"></i>
+              {% if event.price == 0 %}Confirm Registration{% else %}Confirm & Book{% endif %}
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT: Event Details -->
+      <div class="col-lg-4">
+        <div class="glass-card-static p-4 sticky-top" style="top:100px;">
+          <h5 class="mb-4"><i class="fa-solid fa-calendar-check text-accent me-2"></i>Event Details</h5>
+
+          {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-100 mb-3" style="border-radius:14px; height:160px; object-fit:cover;">
+          {% endif %}
+
+          <div class="fw-bold mb-2">{{ event.title }}</div>
+
+          <div class="d-flex flex-column gap-2 text-secondary small">
+            <div><i class="fa-regular fa-calendar text-accent me-2"></i>{{ event.event_date|date:"D, d M Y" }}</div>
+            <div><i class="fa-regular fa-clock text-accent me-2"></i>{{ event.event_time }}</div>
+            <div><i class="fa-solid fa-location-dot text-accent me-2"></i>{{ event.event_location|default:"Online" }}</div>
+            <div><i class="fa-solid fa-ticket text-accent me-2"></i>
+              {% if event.price == 0 %}Free Entry{% else %}${{ event.price }} per ticket{% endif %}
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 text-center" style="background:rgba(16,185,129,0.08); border-radius:12px; border:1px solid rgba(16,185,129,0.2);">
+            <i class="fa-solid fa-shield-halved text-success me-2"></i>
+            <span class="small text-secondary">Secure booking • Instant confirmation</span>
           </div>
         </div>
       </div>
-    </div>
-    <div class="event-dt-block p-80">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-12">
-            <div class="main-title checkout-title">
-              <h3>Order Confirmation</h3>
-            </div>
-          </div>
-          <div class="col-xl-8 col-lg-12 col-md-12">
-            <div class="checkout-block">
-              <div class="main-card">
-                <div class="bp-title">
-                  <h4>Billing information</h4>
-                </div>
-                <div class="bp-content bp-form">
-                  <div class="row">
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">First Name*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="John" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">Last Name*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="Doe" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">Email*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="johndoe@example.com" disabled />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">Address*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group main-form mt-4">
-                        <label class="form-label">Country*</label>
-                        <select class="selectpicker" data-size="5" title="Nothing selected" data-live-search="true">
-                          <option value="Algeria">Algeria</option>
-                          <option value="Argentina">Argentina</option>
-                          <option value="Australia">Australia</option>
-                          <option value="Austria">Austria (Österreich)</option>
-                          <option value="Belgium">Belgium (België)</option>
-                          <option value="Bolivia">Bolivia</option>
-                          <option value="Brazil">Brazil</option>
-                          <option value="Canada">Canada</option>
-                          <option value="Chile">Chile</option>
-                          <option value="Colombia">Colombia</option>
-                          <option value="Costa Rica">Costa Rica</option>
-                          <option value="Cyprus">Cyprus</option>
-                          <option value="Czech Republic">Czech Republic</option>
-                          <option value="Denmark">Denmark</option>
-                          <option value="Dominican Republic">Dominican Republic</option>
-                          <option value="Estonia">Estonia</option>
-                          <option value="Finland">Finland</option>
-                          <option value="France">France</option>
-                          <option value="Germany">Germany</option>
-                          <option value="Greece">Greece</option>
-                          <option value="Hong Kong">Hong Kong</option>
-                          <option value="Iceland">Iceland</option>
-                          <option value="India">India</option>
-                          <option value="Indonesia">Indonesia</option>
-                          <option value="Ireland">Ireland</option>
-                          <option value="Israel">Israel</option>
-                          <option value="Italy">Italy</option>
-                          <option value="Japan">Japan</option>
-                          <option value="Latvia">Latvia</option>
-                          <option value="Lithuania">Lithuania</option>
-                          <option value="Luxembourg">Luxembourg</option>
-                          <option value="Malaysia">Malaysia</option>
-                          <option value="Mexico">Mexico</option>
-                          <option value="Nepal">Nepal</option>
-                          <option value="Netherlands">Netherlands</option>
-                          <option value="New Zealand">New Zealand</option>
-                          <option value="Norway">Norway</option>
-                          <option value="Paraguay">Paraguay</option>
-                          <option value="Peru">Peru</option>
-                          <option value="Philippines">Philippines</option>
-                          <option value="Poland">Poland</option>
-                          <option value="Portugal">Portugal</option>
-                          <option value="Singapore">Singapore</option>
-                          <option value="Slovakia">Slovakia</option>
-                          <option value="Slovenia">Slovenia</option>
-                          <option value="South Africa">South Africa</option>
-                          <option value="South Korea">South Korea</option>
-                          <option value="Spain">Spain</option>
-                          <option value="Sweden">Sweden</option>
-                          <option value="Switzerland">Switzerland</option>
-                          <option value="Tanzania">Tanzania</option>
-                          <option value="Thailand">Thailand</option>
-                          <option value="Turkey">Turkey</option>
-                          <option value="United Kingdom">United Kingdom</option>
-                          <option value="United States">United States</option>
-                          <option value="Vietnam">Vietnam</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">State*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">City/Suburb*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">Zip/Post Code*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="main-card mt-5">
-                <div class="bp-title">
-                  <h4>Total Payable Amount : AUD $50.00</h4>
-                </div>
-                <div class="bp-content bp-form">
-                  <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">Card number*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">Expiry date*</label>
-                        <input class="form-control h_50" type="text" placeholder="MM/YY" value="" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                      <div class="form-group mt-4">
-                        <label class="form-label">CVV*</label>
-                        <input class="form-control h_50" type="text" placeholder="" value="" />
-                      </div>
-                    </div>
-                    <div class="col-lg-12 col-md-12">
-                      <button class="main-btn btn-hover h_50 w-100 mt-5" type="button" onclick="window.location.href='booking_confirmed.html'">Confirm & Pay</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-4 col-lg-12 col-md-12">
-            <div class="main-card order-summary">
-              <div class="bp-title">
-                <h4>Billing information</h4>
-              </div>
-              <div class="order-summary-content p_30">
-                <div class="event-order-dt">
-                  <div class="event-thumbnail-img">
-                    <img src="{{event.image.url}}" alt="" />
-                  </div>
-                  <div class="event-order-dt-content">
-                    <h5>{{event.title}}</h5>
-                    <span>{{event.event_date}}</span>
-                    <div class="category-type"> {{event.event_type}} Event</div>
-                  </div>
-                </div>
-                <div class="order-total-block">
-                  <div class="order-total-dt">
-                    <div class="order-text">Total Ticket</div>
-                    <div class="order-number">1</div>
-                  </div>
-                  <div class="order-total-dt">
-                    <div class="order-text">Sub Total</div>
-                    <div class="order-number">GHS {{event.price}}</div>
-                  </div>
-                  <div class="divider-line"></div>
-                  <div class="order-total-dt">
-                    <div class="order-text">Total</div>
-                    <div class="order-number ttl-clr">GHS {{event.price}}</div>
-                  </div>
-                </div>
-                <div class="coupon-code-block">
-                  <div class="form-group mt-4">
-                    <label class="form-label">Coupon Code*</label>
-                    <div class="position-relative">
-                      <input class="form-control h_50" type="text" placeholder="Code" value="" />
-                      <button class="apply-btn btn-hover" type="button">Apply</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="confirmation-btn">
-                  <form action="" method="POST">
-                    {% csrf_token %}
-                    <p>{{tickets}}</p>
-                    <p>left: {{left}}</p>
-                    <button class="main-btn btn-hover  mt-4" type="submit">Confirm & Pay </button>  
-                      
-                  </form>
-                  <span>Price is inclusive of all applicable GST</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
+</section>
 
-  {% include 'includes/footer.html' %}
-{% endblock %}
+{% endblock content %}

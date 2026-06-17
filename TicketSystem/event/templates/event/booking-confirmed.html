@@ -1,78 +1,70 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 
 {% block content %}
-  
-{% include 'includes/head.html' %}
-  <div class="wrapper">
-    <div class="breadcrumb-block">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-10">
-            <div class="barren-breadcrumb">
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item">
-                    <a href="https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/index.html">Home</a>
-                  </li>
-                  <li class="breadcrumb-item active" aria-current="page">Booking Confirmed</li>
-                </ol>
-              </nav>
-            </div>
+
+<section class="section-py" style="min-height:70vh; display:flex; align-items:center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+
+        <!-- Success Card -->
+        <div class="glass-card-static p-5 text-center">
+
+          <!-- Animated Checkmark -->
+          <div class="mb-4" style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#10b981,#34d399);display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 10px 30px rgba(16,185,129,0.3);">
+            <i class="fa-solid fa-check fa-2x text-white"></i>
           </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="event-dt-block p-80">
-      <div class="container">
-        {% include 'includes/alert.html' %}
-        <div class="row justify-content-center">
-          <div class="col-xl-5 col-lg-7 col-md-10">
-            <div class="booking-confirmed-content">
-              <div class="main-card">
-                <div class="booking-confirmed-top text-center p_30">
-                  <div class="booking-confirmed-img mt-4">
-                    <img src="images/confirmed.png" alt="" />
-                  </div>
-                  <h4>Booking Confirmed</h4>
-                  <p class="ps-lg-4 pe-lg-4">We are pleased to inform you that your reservation request has been received and confirmed.</p>
-                  <div class="add-calender-booking">
-                    <h5>Add</h5>
-                    <a href="booking_confirmed.html#" class="cb-icon"><i class="fa-brands fa-windows"></i></a>
-                    <a href="booking_confirmed.html#" class="cb-icon"><i class="fa-brands fa-apple"></i></a>
-                    <a href="booking_confirmed.html#" class="cb-icon"><i class="fa-brands fa-google"></i></a>
-                    <a href="booking_confirmed.html#" class="cb-icon"><i class="fa-brands fa-yahoo"></i></a>
-                  </div>
+
+          <h2 class="fw-bold mb-2">Booking Confirmed!</h2>
+          <p class="text-secondary mb-4">Your ticket has been successfully booked. We look forward to seeing you there!</p>
+
+          <!-- Event Summary -->
+          <div class="glass-card-static p-4 mb-4 text-start" style="background:rgba(2,132,199,0.04);">
+            <div class="d-flex align-items-start gap-3">
+              {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:80px;height:64px;object-fit:cover;border-radius:12px;flex-shrink:0;">
+              {% else %}
+                <div style="width:80px;height:64px;border-radius:12px;background:linear-gradient(135deg,#e0f2fe,#bae6fd);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i class="fa-solid fa-calendar-days text-accent"></i>
                 </div>
-                <div class="booking-confirmed-bottom">
-                  <div class="booking-confirmed-bottom-bg p_30">
-                    <div class="event-order-dt">
-                      <div class="event-thumbnail-img">
-                        <img src="images/event-imgs/img-7.jpg" alt="" />
-                      </div>
-                      <div class="event-order-dt-content">
-                        <h5>{{event.title}}4</h5>
-                        <span>Wed, Jun 01, 2022 5:30 AM. Duration 1h</span>
-                        <div class="buyer-name">{{profile.name}}</div>
-                        <div class="booking-total-tickets">
-                          <i class="fa-solid fa-ticket rotate-icon"></i>
-                          <span class="booking-count-tickets mx-2">1</span>x Ticket
-                        </div>
-                        <div class="booking-total-grand">
-                          Total : <span>$75.00</span>
-                        </div>
-                      </div>
-                    </div>
-                    <a href="https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/invoice.html" class="main-btn btn-hover h_50 w-100 mt-5"><i class="fa-solid fa-ticket rotate-icon me-3"></i>View Ticket</a>
-                  </div>
+              {% endif %}
+              <div>
+                <div class="fw-bold mb-1">{{ event.title }}</div>
+                <div class="text-secondary small">
+                  <i class="fa-regular fa-calendar text-accent me-1"></i>{{ event.event_date|date:"D, d M Y" }}<br>
+                  <i class="fa-solid fa-location-dot text-accent me-1"></i>{{ event.event_location|default:"Online" }}
                 </div>
               </div>
             </div>
+
+            <div class="mt-3 pt-3 d-flex justify-content-between fw-bold" style="border-top:1px solid rgba(0,0,0,0.06);">
+              <span>Amount Paid</span>
+              <span class="text-accent">{% if event.price == 0 %}Free{% else %}${{ event.price }}{% endif %}</span>
+            </div>
           </div>
+
+          <!-- Booking Ref -->
+          <div class="p-3 mb-4" style="background:rgba(16,185,129,0.06);border-radius:12px;border:1px dashed rgba(16,185,129,0.3);">
+            <div class="text-secondary small">Booked by</div>
+            <div class="fw-bold">{{ user.get_full_name|default:user.username }}</div>
+            <div class="text-secondary small">{{ user.email }}</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'events' %}" class="btn-accent px-4 py-2">
+              <i class="fa-solid fa-calendar-days me-2"></i>Explore More Events
+            </a>
+            <a href="{% url 'event-dashboard' %}" class="btn-glass px-4 py-2">
+              <i class="fa-solid fa-list me-2"></i>My Bookings
+            </a>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  {% include 'includes/footer.html' %}
-{% endblock %}
+{% endblock content %}
