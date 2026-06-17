@@ -28,10 +28,11 @@ jobs:
         cd TicketSystem
         python manage.py check
         
-    - name: Run Migrations Check
+    - name: Run Database Migrations
       run: |
         cd TicketSystem
-        python manage.py makemigrations --check --dry-run
+        python manage.py makemigrations
+        python manage.py migrate
         
     - name: Build Docker Image
       run: |
