@@ -7,13 +7,18 @@ import uuid
 CATEGORY = (
     ('Art', 'Art'),
     ('Business', 'Business'),
-    ('Concert', 'Business'),
+    ('Concert', 'Concert'),
     ('Workshop', 'Workshop'),
     ('Volunteer', 'Volunteer'),
     ('Sports', 'Sports'),
     ('Free', 'Free'),
-
-
+    ('Health', 'Health'),
+    ('Cultural', 'Cultural'),
+    ('Tech', 'Tech'),
+    ('Meeting', 'Meeting'),
+    ('Games', 'Games'),
+    ('Music', 'Music'),
+    ('Other', 'Other'),
 )
 class Event(models.Model):
     organizer = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)

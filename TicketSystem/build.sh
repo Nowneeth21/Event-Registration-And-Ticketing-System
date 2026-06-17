@@ -7,6 +7,7 @@ pip install -r requirements.txt
 pip install psycopg2-binary   # Install PostgreSQL driver only on Render (Linux)
 
 python manage.py collectstatic --no-input
+python manage.py makemigrations
 python manage.py migrate
 
 # Create admin superuser automatically
